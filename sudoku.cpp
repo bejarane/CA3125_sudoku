@@ -2,7 +2,12 @@
 bool leerTipo(){
     string buffer;
     cin >> buffer;
+    
+    //las siguientes lineas son solo para debug
     cout << "Tipo de analisis es " << buffer << endl;
+    bool resultado = buffer=="profundidad";
+    cout << resultado << endl; 
+    //terminan lineas de debug
     return buffer=="profundidad";
 }
 
