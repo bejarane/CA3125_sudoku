@@ -16,11 +16,10 @@ void leerMatriz(Sudoku &_sudoku){
     Matriz buffer;
     int entrada=0;
     for (int j = 0; j<9; j++){
-        vector <Celda> columna;
+        vector <int> columna;
         for (int k = 0; k<9; k++){
             cin >> entrada;
-            Celda celda(j,k,entrada);
-            columna.push_back(celda);
+            columna.push_back(entrada);
         }
         buffer.contenido.push_back(columna);
     }

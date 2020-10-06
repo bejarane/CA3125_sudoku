@@ -50,7 +50,7 @@ class Celda {
 
 class Matriz {
     public: //esta public para pruebas, pero deberia ser private
-        vector <vector <Celda>> contenido; //un vector multidimensional para guardar las celdas
+        vector <vector <int>> contenido; //un vector multidimensional para guardar las celdas
 
 };
 
@@ -63,7 +63,7 @@ class Sudoku{
         void imprimirOrigen(){
             for (int j = 0; j<9; j++){
                 for (int k = 0; k<9; k++){
-                    cout << origen.contenido[j][k].read() << " ";
+                    cout << origen.contenido[j][k] << " ";
                 }
                 cout << endl;
             }
