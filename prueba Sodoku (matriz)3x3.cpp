@@ -21,8 +21,9 @@ int main () {
 
 	return 0;
 }*/
-
-
+//*****************************************************************
+// VARIANTE PARA LA PRUEBA abajo QUE SE QUIERE HACER DE METER MATRICES MAS GRANDES(arriba es para recorrer y rellenar la matriz)
+//*****************************************************************
 #include <bits/stdc++.h>
 using namespace std;
 
