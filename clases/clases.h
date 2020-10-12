@@ -51,21 +51,80 @@ class Celda {
 class Matriz {
     public: //esta public para pruebas, pero deberia ser private
         vector <vector <int>> contenido; //un vector multidimensional para guardar las celdas
+        vector <vector <int>> posibilidades;
+        int restantes = 0;
 
 };
 
 class Sudoku{
     public: //mismo caso del public anterior
         Matriz origen;
-        vector <Matriz> soluciones; //vector que se usará como pila o cola, la pila seria la más eficiente.
+        Matriz solucion;
         bool metodo = true; //Método de solución. True es profundidad y false es anchura
+        int tamano = 0;
+        int subtamano = 0;
+        queue <Matriz> cola;
+        stack <Matriz> pila;
 
-        void imprimirOrigen(){
-            for (int j = 0; j<9; j++){
-                for (int k = 0; k<9; k++){
-                    cout << origen.contenido[j][k] << " ";
+        void imprimir(Matriz entrada, bool bin, bool posi){
+            int n = 0;
+            //cout << tamano << "matriz" << endl;
+            while(n<tamano){
+                cout << "l\t";
+                int m = 0;
+                while(m<tamano){
+                    if (bin){
+                        cout << bitset<10>(entrada.contenido[n][m]) << "\t";
+                    }else{
+                        int punto = entrada.contenido[n][m];
+                        for (int j = 0; j <tamano; j++){
+                            if(punto>>9){
+                                cout << 0 << " ";
+                                break;
+                            }
+                            if((punto&1<<j)>0){ //es una posibilidad
+                                punto = j+1; //el 1 tiene una posicion 0
+                                cout << punto << " ";
+                                break;
+                            }
+                        }
+                    }
+                    m++;
                 }
                 cout << endl;
+                n++;
+            }
+            if(posi){
+                n =0;
+                for (int j = 0; j< tamano;j++){
+                    for (int k = 0; k<tamano; k++){
+                        cout << entrada.posibilidades[j*tamano+k][0] << " ";
+                    }
+                    cout << endl;
+                }
+            }
+        }
+
+        void imprimirDec(vector<vector<int>> contenido){
+            int n = 0;
+            cout << endl;
+            //cout << tamano << "matriz" << endl;
+            while(n<tamano){
+                cout << "l\t";
+                int m = 0;
+                while(m<tamano){
+                    int punto = contenido[n][m];
+                    for (int j = 0; j <tamano; j++){
+                        if((punto&1<<j)>0){ //es una posibilidad
+                            punto = j+1; //el 1 tiene una posicion 0
+                            cout << punto << " ";
+                            break;
+                        }
+                    }
+                    m++;
+                }
+                cout << endl;
+                n++;
             }
         }
 };
