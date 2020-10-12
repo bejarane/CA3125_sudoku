@@ -44,6 +44,7 @@ int main () {
 	for(int i=0;i<f;i++){
 		for(int j=0;j<c;j++){
 			cout << matriz[i][j];
+			cout<<" ";
 		}
 		cout<<"\n";
 	}
