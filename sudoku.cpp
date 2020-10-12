@@ -298,6 +298,8 @@ int main(){
         casos = stoi(buffer);
         while(casos>0){
             casos --;
+            auto current_time = std::chrono::high_resolution_clock::now();
+            auto start_time = std::chrono::high_resolution_clock::now();
             Sudoku prueba;
             if(!leerMatriz(prueba)){
                 cout << "Entrada erronea" << endl;
@@ -307,7 +309,9 @@ int main(){
             //prueba.imprimir(prueba.origen,true,true);
             DPRINTLN('\n');
             if(resolver(prueba)){
+                current_time = std::chrono::high_resolution_clock::now();
                 prueba.imprimir(prueba.solucion,false,false);
+                cout << "Tiempo de resolucion: " << std::chrono::duration_cast<std::chrono::milliseconds>(current_time - start_time).count() << " ms" << std::endl;
             }
         }
         break;
