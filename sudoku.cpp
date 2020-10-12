@@ -304,10 +304,10 @@ int main(){
                 continue;
             }
             DPRINTLN("Imprime");
-            prueba.imprimir(prueba.origen,true,true);
+            //prueba.imprimir(prueba.origen,true,true);
             DPRINTLN('\n');
             if(resolver(prueba)){
-                prueba.imprimirDec(prueba.solucion.contenido);
+                prueba.imprimir(prueba.solucion,false,false);
             }
         }
         break;
