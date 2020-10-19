@@ -1,3 +1,16 @@
+///////// 2020. GNU GENERAL PUBLIC LICENSE /////////////////////////
+//
+//  Project     : Solucionador de Sudoku
+//  File        : clases.cpp
+//  Description :
+//      Desarrollo de métodos de clase.
+//
+//  Authors     : E. Rodriguez
+//                Keylor D. Muños Soto
+//
+//  Git repository: https://github.com/bejarane/sudoku
+////////////////////////////////////////////////////////////////////
+
 #include "clases.h"
 
 /**
@@ -9,7 +22,7 @@ int Matriz::menor(){ //http://www2.lawrence.edu/fast/GREGGJ/CMSC270/iterators.ht
     vector<vector<int>> _data = posibilidades;
     int min = 2000, contador = 0, posi = -1;
     for (auto j = begin(_data);j!=end(_data);++j,++contador){ //no esta ordenada y ordenarla seria perder la llave de acceso
-        //cout << j->operator[](0) << endl;
+    //abierto a mejores ideas para guardar la informacion de manera ordenada.
         if(j->operator[](0)<min && j->operator[](0)!=-1){ //el minimo no puede ser uno de los fijos
             min = j->operator[](0);
             posi = contador;
@@ -19,78 +32,6 @@ int Matriz::menor(){ //http://www2.lawrence.edu/fast/GREGGJ/CMSC270/iterators.ht
     DPRINT(posi);
     return posi;
 }
-
-/**
- * Imprime el contenido de una matriz de Sudoku
- * @param entrada Objeto de tipo Matriz.
- * @param bin Booleano que indica si imprimir el Sudoku en binario.
- * @param posi Booleano que indica si se debe imprimir la lista de posibilidades.
- */
-void Sudoku::imprimir(Matriz entrada, bool bin, bool posi){
-    int n = 0;
-    //cout << tamano << "matriz" << endl;
-    while(n<tamano){
-        cout << "l\t";
-        int m = 0;
-        while(m<tamano){
-            if (bin){
-                cout << bitset<10>(entrada.contenido[n][m]) << "\t";
-            }else{
-                int punto = entrada.contenido[n][m];
-                for (int j = 0; j <tamano; j++){
-                    if(punto>>9){
-                        cout << 0 << " ";
-                        break;
-                    }
-                    if((punto&1<<j)>0){ //es una posibilidad
-                        punto = j+1; //el 1 tiene una posicion 0
-                        cout << punto << " ";
-                        break;
-                    }
-                }
-            }
-            m++;
-        }
-        cout << endl;
-        n++;
-    }
-    if(posi){
-        n =0;
-        for (int j = 0; j< tamano;j++){
-            for (int k = 0; k<tamano; k++){
-                cout << entrada.posibilidades[j*tamano+k][0] << " ";
-            }
-            cout << endl;
-        }
-    }
-}
-
-/**
- * Imprime el contenido de una matriz de Sudoku
- * @param entrada 
- */
-// void Sudoku::imprimirDec(vector<vector<int>> contenido){
-//     int n = 0;
-//     cout << endl;
-//     //cout << tamano << "matriz" << endl;
-//     while(n<tamano){
-//         cout << "l\t";
-//         int m = 0;
-//         while(m<tamano){
-//             int punto = contenido[n][m];
-//             for (int j = 0; j <tamano; j++){
-//                 if((punto&1<<j)>0){ //es una posibilidad
-//                     punto = j+1; //el 1 tiene una posicion 0
-//                     cout << punto << " ";
-//                     break;
-//                 }
-//             }
-//             m++;
-//         }
-//         cout << endl;
-//         n++;
-//     }
-// }
 
 /**
  * Lee la entrada de consola e identifica el tipo de análisis que se desea llevar a cabo
@@ -106,13 +47,12 @@ bool Sudoku::leerTipo(){
     //las siguientes lineas son solo para debug
     DPRINT("Tipo de analisis es ");
     DPRINTLN(buffer);
-
     #ifdef DEBUG
     bool resultado = buffer=="profundidad";
     DPRINTLN(resultado);
     #endif
-
     //terminan lineas de debug
+
     return buffer=="profundidad";
 }
 
@@ -188,6 +128,8 @@ bool Sudoku::insertarRegla(Matriz &data,int numero, int col, int fil){
 bool Sudoku::parseInput(){
     int input;
     vector<int> test;
+    bool viable = true;
+
     metodo = leerTipo(); // inserta un valor que indica el tipo de evaluacion
     string line;
     getline(cin, line); //lee la linea restante con n numeros
@@ -217,7 +159,7 @@ bool Sudoku::parseInput(){
     while(k < tamano){
         if(test[k]!=0){
             int buff = SET(base0,test[k]);
-            if(!insertarRegla(origen,buff,k,0))return false;
+            if(!insertarRegla(origen,buff,k,0))viable = false;
         }
         k ++;
     }
@@ -232,14 +174,14 @@ bool Sudoku::parseInput(){
         while ( iss2 >> input) {  //la funcion >> lee hasta topar con un espacio, asi que está leyendo ints  
             if(input!=0){
                 int buff = SET(base0,input);
-                if(!insertarRegla(origen,buff,col,fila))return false;
+                if(!insertarRegla(origen,buff,col,fila))viable = false;
             }
             col++;
         }
         fila++;
     }
     DPRINTLN("Finaliza lectura");
-    return true;
+    return viable;
 }
 
 /**
@@ -323,8 +265,15 @@ bool Sudoku::recurrencia(){
  * @return Booleano, true al resolver el sudoku, falso en caso contrario.
  */
 bool Sudoku::resolver(){
-    //primero, conocer el menor de posibilidades
     int sig = origen.menor();
+    //cout << "restante" << origen.restantes << endl;
+    //primero, saber si cumple con Gary McGuire
+    if(origen.restantes>(tamano*tamano-17)){
+        cout << "Sudoku con múltiples soluciones, el menor está en: \n" 
+        "Fila: "<< (sig/tamano) << "\nColumna: " << sig-((sig/tamano)*tamano) << endl;
+        return false;
+    }
+    //segundo, conocer el menor de posibilidades
     if (sig == -1) {//se insertó un sudoku ya resuelto
         solucion = origen;
         return true; 
@@ -341,3 +290,49 @@ bool Sudoku::resolver(){
     }
     return true;
 }
+
+/**
+ * Imprime el contenido de una matriz de Sudoku
+ * @param entrada Objeto de tipo Matriz.
+ * @param bin Booleano que indica si imprimir el Sudoku en binario.
+ * @param posi Booleano que indica si se debe imprimir la lista de posibilidades.
+ */
+void Sudoku::imprimir(Matriz entrada, bool bin, bool posi){
+    int n = 0;
+    //cout << tamano << "matriz" << endl;
+    while(n<tamano){
+        //cout << "l\t";
+        int m = 0;
+        while(m<tamano){
+            if (bin){
+                cout << bitset<10>(entrada.contenido[n][m]) << "\t";
+            }else{
+                int punto = entrada.contenido[n][m];
+                for (int j = 0; j <tamano; j++){
+                    if(punto>>9){
+                        cout << 0 << " ";
+                        break;
+                    }
+                    if((punto&1<<j)>0){ //es una posibilidad
+                        punto = j+1; //el 1 tiene una posicion 0
+                        cout << punto << " ";
+                        break;
+                    }
+                }
+            }
+            m++;
+        }
+        cout << endl;
+        n++;
+    }
+    if(posi){
+        n =0;
+        for (int j = 0; j< tamano;j++){
+            for (int k = 0; k<tamano; k++){
+                cout << entrada.posibilidades[j*tamano+k][0] << " ";
+            }
+            cout << endl;
+        }
+    }
+}
+
