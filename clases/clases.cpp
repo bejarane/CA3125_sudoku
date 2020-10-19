@@ -281,11 +281,13 @@ bool Sudoku::resolver(){
     //cout << "siguiente" << origen.posibilidades[sig][0] << endl;
  
     if(!crearcasos(origen,sig)){
-        cout << "No se puede resolver, el menor era: " << sig << endl;
+        cout << "Conflicto al primer intento de solución, el menor está en: \n" 
+        "Fila: "<< (sig/tamano) << "\nColumna: " << sig-((sig/tamano)*tamano) << endl;
         return false;
     }
     if(!recurrencia()){
-        cout << "No se puede resolver por backtracking"<< endl;
+        cout << "No se pudo resolver por backtracking, el menor está en: \n" 
+        "Fila: "<< (sig/tamano) << "\nColumna: " << sig-((sig/tamano)*tamano) << endl;
         return false;
     }
     return true;
