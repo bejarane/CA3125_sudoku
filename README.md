@@ -13,6 +13,8 @@ Una vez se dispone del archivo ejecutable, basta con cargar un archivo de prueba
 
 En la carpeta *inputs* se adjuntan casos de prueba que pueden ser utilizados como template para generar nuevos casos de prueba.
 
+Además, en el archivo *makefile* se ha incluido un macro para limpiar los archivos compilados. Basta con utilizar el comando `make clean` para eliminar los archivos de binarios y la carpeta *bin*. En caso de realizar modificaciones que no se vean reflejadas después de compilación, se recomienda limpiar la "cache" con este macro.
+
 ## Funcionamiento
 El funcionamiento del programa se describe a grandes razgos en la siguiente imagen: ![proceso](/results/proceso.png)
 
